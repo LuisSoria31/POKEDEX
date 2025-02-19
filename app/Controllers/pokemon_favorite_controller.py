@@ -11,20 +11,24 @@ from bson import ObjectId
 
 bp = Blueprint("pokemons", __name__, url_prefix="/pokemons")
 fav_pokemon_schema = PokemonFav()
-pokemon_fav_schema = ModelFactory.get_model("pokemons")
+pokemon_fav_model= ModelFactory.get_model("pokemons")
 
-@bp.route("/create<string:pokemon_fav_id>", method=["CREATE"])
-def create(pokemon_fav_id):
-    pokemon_fav_schema.create(ObjectId(pokemon_fav_id))
-    return jsonify("Pokemon creado con exito", 200)
+
+@bp.route("/register", methods=["POST"])
+def register():
+    try:
+        data = fav_pokemon_schema.load(request.json)
+        pokekemon_fav_id = pokemon_fav_model.create(data)
+        return jsonify({"pokemon_fav_id":str(pokekemon_fav_id)}, 200)
+    except ValidationError as err:
+        return jsonify("los parametros enviados son incorrectos", 400)
     
 @bp.route("/delete/<string:pokemon_fav_id>", method=["DELETE"])
 def delet(pokemon_fav_id):
-    pokemon_fav_schema.delete(ObjectId(pokemon_fav_id))
+    pokemon_fav_model.delete(ObjectId(pokemon_fav_id))
     return jsonify("Pokemon eliminado con exito", 200)
 
 @bp.route("/get/<string:pokemon_fav_id", method=["GET"])
 def get_user(pokemon_fav_id):
-    pokemon = pokemon_fav_schema.find_by_id(ObjectId(pokemon_fav_id))
+    pokemon = pokemon_fav_model.find_by_id(ObjectId(pokemon_fav_id))
     return jsonify(pokemon, 200)
-
