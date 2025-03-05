@@ -7,7 +7,7 @@ from bson import ObjectId
 from flask_jwt_extended import jwt_required, get_jwt_identity
 
 RM = ResponseManager()
-bp = Blueprint("pokemon_favorites", __name__, url_prefix="/pokemons")
+bp = Blueprint("pokemon_favorites", __name__, url_prefix="/pokemon-favorites")
 pokemon_fav_model= ModelFactory.get_model("pokemon_favorites")
 fav_pokemon_schema = PokemonFavoriteSchema()
 
@@ -32,9 +32,9 @@ def delet(pokemon_fav_id):
     pokemon_fav_model.delete(ObjectId(pokemon_fav_id))
     return RM.success("Pokemon eliminado con exito")
 
-@bp.route("/get/<string:pokemon_fav_id>", methods=["GET"])
+@bp.route("/get", methods=["GET"])
 @jwt_required()
 def get_user():
     user_id = get_jwt_identity()
-    data = pokemon_fav_model.find_by_id(user_id)
+    data = pokemon_fav_model.find_all(user_id)
     return RM.success(data)

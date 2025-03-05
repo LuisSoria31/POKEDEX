@@ -23,4 +23,4 @@ class PokemonFavorites(SuperClass):
         data["user_id"] = ObjectId(data["user_id"])
         data["pokemon_id"] = ObjectId(data["pokemon_id"])
         datum = self.collection.insert_one(data)
-        return str(datum.insert_one)
+        return str(datum.inserted_id)
