@@ -1,7 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Image, TextInput, Pressable, Systrace } from 'react-native';
 
-export default function App() {
+  export default function App() {
   return (
     <View style={styles.container}>
       <View>
@@ -12,9 +12,9 @@ export default function App() {
       <View>
         <Text style={styles.title}>Iniciar Sesion</Text>
         <Text style={styles.label}>Correo:</Text>
-        <TextInput style={styles.input}></TextInput>
+        <TextInput style={styles.input}placeholder='Ingrese su Correo'></TextInput>
         <Text style={styles.label}>Contraseña:</Text>
-        <TextInput style={styles.input}></TextInput>
+        <TextInput style={styles.input}placeholder='Ingrese su Contraseña'></TextInput>
         <Pressable style={styles.send}>
           <Text style={styles.send.textButton}>Enviar</Text>
         </Pressable>
