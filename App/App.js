@@ -1,76 +1,38 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Image, TextInput, Pressable, Systrace } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { Login } from './Login';
+import { navigationRef } from './navigation';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { useState } from 'react';
+import { Home } from './Home';
 
-  export default function App() {
+const Stack = createNativeStackNavigator();
+
+
+const Tab = createBottomTabNavigator();
+
+function Tabs() {
   return (
-    <View style={styles.container}>
-      <View>
-        <Image source={{ uri: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Pok%C3%A9_Ball_icon.svg/2052px-Pok%C3%A9_Ball_icon.svg.png" }}
-          width={200}
-          height={200} />
-      </View>
-      <View>
-        <Text style={styles.title}>Iniciar Sesion</Text>
-        <Text style={styles.label}>Correo:</Text>
-        <TextInput style={styles.input}placeholder='Ingrese su Correo'></TextInput>
-        <Text style={styles.label}>Contraseña:</Text>
-        <TextInput style={styles.input}placeholder='Ingrese su Contraseña'></TextInput>
-        <Pressable style={styles.send}>
-          <Text style={styles.send.textButton}>Enviar</Text>
-        </Pressable>
-      </View>
-      <View style={styles.containerFooter}>
-        <Text style={styles.containerFooter.texts}>Olvidaste tu Contraseña</Text>
-        <Text style={styles.containerFooter.texts}>Registrate</Text>
-      </View>
-    </View>
+    <Tab.Navigator initialRouteName='Home' screenOptions={{ headerShown: false }}>
+      <Tab.Screen name="Home" component={Home} />
+    </Tab.Navigator>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: '#fff',
-    padding: 10,
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
-
-  title:{
-    fontSize: 30,
-    fontWeight: 'bold'
-  },
-  label:{
-    fontSize: 20,
-    fontWeight: 'bold'
-  },
-  input:{
-    borderRadius: 10,
-    borderWidth: 2,
-    borderColor: 'black',
-    fontSize: 15,
-    width: 'auto',
-  },
-  send:{
-    backgroundColor: 'red',
-    width: 'auto',
-    height: 'auto',
-    fontWeight: 'bold',
-    fontSize: 30,
-    borderRadius: 10,
-    marginTop: 15,
-    alignItems: 'center',
-    textButton:{
-      color:"white",
-      fontSize: 25,
-      fontWeight: 'bold'
-    }
-  },
-  containerFooter:{
-    justifyContent:'space-between',
-    alignItems: 'center',
-    texts:{
-      fontSize: 20,
-      margin:5
-    }
-  }
-});
+  export default function App() {
+    const [isLogged, setIsLogged] = useState(false)
+    return (
+    <NavigationContainer ref={navigationRef}>
+      <Stack.Navigator initialRouteName="Login" screenOptions={{headerShown: false}}>
+        {
+          isLogged ? (
+            <Stack.Screen name="Tabs" component={Tabs}/>
+          ) : (
+            <Stack.Screen name="Login">
+              {(props) => <Login {...props} onLogin={() => setIsLogged(true)} />}
+            </Stack.Screen> 
+          )
+        }
+       </Stack.Navigator>
+    </NavigationContainer>
+  );
+}
